@@ -1,4 +1,4 @@
-import React, { useState, useMemo, type KeyboardEvent } from "react";
+import React, { useState, type KeyboardEvent } from "react";
 import { twMerge } from "tailwind-merge";
 
 const MAX_GUESS_COUNT: number = 5;
@@ -10,11 +10,11 @@ const Wordle: React.FC = () => {
   const [input, setInput] = useState("");
   const [guesses, setGuesses] = useState<string[]>([]);
 
-  const status = useMemo(() => {
+  const status: "playing" | "win" | "loss" = (() => {
     if (guesses.includes(solution)) return "win";
     if (guesses.length === MAX_GUESS_COUNT) return "loss";
     return "playing";
-  }, [guesses]);
+  })();
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (
