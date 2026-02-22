@@ -1,0 +1,30 @@
+{
+  "name": "frontend-master-v9",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build":"vite build",
+    "dev":"vite",
+    "preview":"vite preivew",
+    "format": "prettier --write \"src/**/*.{js,jsx,css,html}\"",
+    "lint": "eslint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^10.0.1",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.9.0",
+    "prettier": "^3.8.1",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
