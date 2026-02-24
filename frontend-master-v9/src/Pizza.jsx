@@ -1,10 +1,10 @@
 const Pizza = (props) => {
   return (
     <div className="pizza">
-      <label htmlFor=""></label>
-      <h3>{props.name}</h3>
+      <h1>{props.name}</h1>
       <p>{props.description}</p>
       <img src={props.image} alt={props.name} />
+      <p>{props.prize}</p>
     </div>
   );
 };
