@@ -7,7 +7,7 @@ export default function Cart({ cart, checkout }) {
   let total = 0;
   for (let i = 0; i < cart.length; i++) {
     const current = cart[i];
-    total += current.pizza.sizes[current.pizzaSize];
+    total += current.pizza.sizes[current.size];
   }
   return (
     <div className="cart">
@@ -15,9 +15,11 @@ export default function Cart({ cart, checkout }) {
       <ul>
         {cart.map((item, index) => (
           <li key={index}>
-            <span className="size">{item.pizzaSize}</span> –
+            <span className="size">{item.size}</span> –
             <span className="type">{item.pizza.name}</span> –
-            <span className="price">{intl.format(item.pizza.sizes[item.pizzaSize])}</span>
+            <span className="price">
+              {intl.format(item.pizza.sizes[item.size])}
+            </span>
           </li>
         ))}
       </ul>

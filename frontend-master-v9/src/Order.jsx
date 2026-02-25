@@ -34,6 +34,23 @@ export default function Order() {
     setLoading(false);
   }
 
+  async function checkout() {
+    setLoading(true);
+
+    await fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cart,
+      }),
+    });
+
+    setCart([]);
+    setLoading(false);
+  }
+
   return (
     <div className="order-page">
       <div className="order">
@@ -41,7 +58,10 @@ export default function Order() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            setCart([...cart, { pizza: selectedPizza, pizzaSize: pizzaSize }]);
+            setCart([
+              ...cart,
+              { pizza: selectedPizza, size: pizzaSize, price },
+            ]);
           }}
         >
           <div>
@@ -113,7 +133,7 @@ export default function Order() {
           )}
         </form>
       </div>
-      {loading ? <h2>Loading...</h2> : <Cart cart={cart} />}
+      {loading ? <h2>Loading...</h2> : <Cart cart={cart} checkout={checkout} />}
     </div>
   );
 }
