@@ -1,4 +1,3 @@
-import React from "react";
 import { usePizzaOfTheDay } from "./usePizzaOfTheDay";
 
 const intl = new Intl.NumberFormat("en-US", {
