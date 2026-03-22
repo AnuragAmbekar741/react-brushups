@@ -1,0 +1,7 @@
+/* Backdrop: semi-transparent overlay with blur */
+.container::backdrop {
+}
+
+/* Container: centered with drop-shadow */
+.container {
+}

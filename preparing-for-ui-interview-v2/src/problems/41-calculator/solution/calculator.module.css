@@ -1,0 +1,21 @@
+.calculator {
+  padding: 1rem;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+}
+
+.output {
+  text-align: right;
+}
+
+.button {
+  background-color: lightslategray;
+  text-align: center;
+  padding: 0.5rem;
+  aspect-ratio: 1 / 1;
+  min-width: 2rem !important;
+}

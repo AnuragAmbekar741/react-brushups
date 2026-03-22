@@ -1,0 +1,27 @@
+/* Container: relative positioning, inline-block */
+.container {
+  position: relative;
+}
+
+/* Tooltip: absolute positioned, styled box with opacity transition */
+.tooltip {
+  position: absolute;
+  width: 100px;
+  max-width: 100px;
+  min-height: 100px;
+  background: yellow;
+  display: none;
+  cursor: pointer;
+}
+
+.top {
+}
+
+.bottom {
+}
+
+.left {
+}
+
+.right {
+}
