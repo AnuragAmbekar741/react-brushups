@@ -1,0 +1,33 @@
+/* Student solution styles */
+
+/* style the clickable header
+- hide default marker with list-style: none */
+.summary {
+}
+
+/* Hide the default disclosure triangle in WebKit browsers */
+.summary::-webkit-details-marker {
+}
+
+/* Details: style the accordion item wrapper */
+.details {
+}
+
+/* Animate content expansion using ::details-content pseudo-element
+   - transition max-height (0.3s ease) and content-visibility (0.3s allow-discrete)
+   - set max-height to 0
+   - hide overflow */
+.details::details-content {
+}
+
+/* When open, expand content */
+.details[open]::details-content {
+
+/* Optional - style marker */
+/* Custom indicator (plus sign) */
+.summary::after {
+}
+
+/* Rotate the indicator when the item is open */
+.details[open] .summary::after {
+}

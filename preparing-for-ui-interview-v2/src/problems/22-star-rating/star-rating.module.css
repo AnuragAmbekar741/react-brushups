@@ -1,0 +1,26 @@
+/* Container for the star rating */
+.container {
+}
+
+/* Base star style (provided) */
+.star {
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 1;
+}
+
+/* Disabled/Readonly state (provided) */
+.star:disabled,
+.star[aria-readonly='true'] {
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Dimmed state for inactive stars (provided) */
+.star[data-checked='false'] {
+  opacity: 0.4;
+}

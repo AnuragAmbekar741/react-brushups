@@ -1,0 +1,59 @@
+.list {
+  transition: transform 0.3s ease-in-out;
+}
+
+.item {
+  flex-shrink: 0;
+}
+
+.item img {
+  object-fit: cover;
+}
+
+.container {
+  overflow: hidden;
+}
+
+.button {
+  cursor: pointer;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+.button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.button:not(:disabled):hover {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+
+/* Indicator dots */
+.indicators {
+  bottom: 16px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.dotActive {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* Empty state */
+.empty {
+  color: #999;
+}

@@ -1,0 +1,19 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
+  width: fit-content;
+}
+
+.cell {
+  font-weight: bold;
+  user-select: none;
+}
+
+.cell__empty {
+  cursor: default;
+}
+
+.cell__filled {
+  cursor: pointer;
+}
