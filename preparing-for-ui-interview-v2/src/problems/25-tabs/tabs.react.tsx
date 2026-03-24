@@ -1,4 +1,10 @@
-import React, { useState, type PropsWithChildren, type ReactElement, type RefObject } from 'react'
+import React, {
+  cloneElement,
+  useState,
+  type PropsWithChildren,
+  type ReactElement,
+  type RefObject,
+} from 'react'
 import flex from '@course/styles'
 import tabs from './tabs.module.css'
 import cx from '@course/cx'
@@ -66,15 +72,29 @@ export function Tabs({ defaultTab, children, target }: TTabsProps) {
   }
   return (
     <nav>
-      <ul role="tablist" onClickCapture={handleTabClick}>
-        {children.map((child) => (
-          <Tab name={child.props.name} isActive={child.props.name === active} />
-        ))}
+      <ul
+        role="tablist"
+        onClickCapture={handleTabClick}
+        className={cx(flex.flexRowStart, flex.flexGap16)}
+      >
+        {children.map((child) => cloneElement(child, { isActive: child.props.name === active }))}
       </ul>
-      {content && target?.current !== null && (
-        <div role="tabpanel" id="tab-panel" aria-labelledby={`tab-${active}`}>
+      {content && target?.current != null ? (
+        createPortal(
+          <div role="tabpanel" id="tab-panel" aria-labelledby={`tab-${active}`}>
+            {content}
+          </div>,
+          target?.current,
+        )
+      ) : (
+        <section
+          role="tabpanel"
+          id="tab-panel"
+          aria-labelledby={`tab-${active}`}
+          className={tabs.container}
+        >
           {content}
-        </div>
+        </section>
       )}
     </nav>
   )
