@@ -22,8 +22,19 @@ type TTabsProps = {
  *   aria-controls="tab-panel", aria-selected={isActive}
  */
 export function Tab({ name, isActive }: TTabProps) {
-  // TODO: implement
-  return null
+  return (
+    <li role="presentation">
+      <button
+        role="tab"
+        id={`tab-${name}`}
+        data-tab-name={name}
+        aria-controls="tab-panel"
+        aria-selected={isActive}
+      >
+        {name}
+      </button>
+    </li>
+  )
 }
 
 /**
@@ -45,8 +56,28 @@ export function Tab({ name, isActive }: TTabProps) {
  * - If target ref exists, use createPortal with a <div role="tabpanel"> wrapper instead
  */
 export function Tabs({ defaultTab, children, target }: TTabsProps) {
-  // TODO: implement
-  return <div>TODO: Implement Tabs</div>
+  const [active, setActive] = useState<string>(defaultTab || children[0].props.name)
+  const content = children.find((child) => child.props.name === active)?.props.children
+  const handleTabClick = ({ target }: React.MouseEvent<HTMLUListElement>) => {
+    if (target instanceof HTMLButtonElement) {
+      const tabName = target.dataset.tabName
+      if (tabName) setActive(tabName)
+    }
+  }
+  return (
+    <nav>
+      <ul role="tablist" onClickCapture={handleTabClick}>
+        {children.map((child) => (
+          <Tab name={child.props.name} isActive={child.props.name === active} />
+        ))}
+      </ul>
+      {content && target?.current !== null && (
+        <div role="tabpanel" id="tab-panel" aria-labelledby={`tab-${active}`}>
+          {content}
+        </div>
+      )}
+    </nav>
+  )
 }
 
 /**
