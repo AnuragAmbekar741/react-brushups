@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import css from './dialog.module.css'
+import css from './solution/dialog.module.css'
 import styles from '@course/styles'
 import cx from '@course/cx'
 
@@ -27,6 +27,29 @@ type TDialogProps = {
  * - Use cx() and styles utilities for layout (padding24, bNone, br8, flexRowBetween, flexGap8)
  */
 export function Dialog({ open, onConfirm, onCancel, children }: TDialogProps) {
-  // TODO: implement
-  return <div>TODO: Implement</div>
+  const dailogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    const dailog = dailogRef.current
+    if (!dailog) return
+    if (open) {
+      dailog.showModal()
+    } else {
+      dailog.close()
+    }
+  }, [open])
+
+  return (
+    <dialog
+      className={cx(styles.padding24, styles.bNone, styles.br8, css.container)}
+      ref={dailogRef}
+      onClose={onCancel}
+    >
+      <section className={styles.paddingVer8}>{children}</section>
+      <footer className={cx(styles.flexRowBetween, styles.flexGap8, styles.paddingVer8)}>
+        <button onClick={onConfirm}>Confirm</button>
+        <button onClick={onCancel}>Cancel</button>
+      </footer>
+    </dialog>
+  )
 }
