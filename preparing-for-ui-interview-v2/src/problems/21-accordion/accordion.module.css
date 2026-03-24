@@ -21,7 +21,7 @@
 }
 
 /* When open, expand content */
-.details[open]::details-content {
+.details[open]::details-content {}
 
 /* Optional - style marker */
 /* Custom indicator (plus sign) */
