@@ -1,6 +1,7 @@
-import css from './star-rating.module.css'
+import css from './solution/star-rating.module.css'
 import flex from '@course/styles'
 import cx from '@course/cx'
+import { useCallback } from 'react'
 
 /**
  * Expected input:
@@ -26,10 +27,63 @@ import cx from '@course/cx'
  * 5. Add CSS styles for stars
  */
 
-const STAR = '⭐️'
-const STARS_COUNT = 5
-type TProps = {}
+const STARS = ['⭐️', '⭐️', '⭐️', '⭐️', '⭐️'] as const
 
-export const StarRating = (props: TProps) => {
-  return <div>TODO: Implement</div>
+type TProps = {
+  value: number
+  readonly: boolean
+  onChange: (val: number) => void
+}
+
+export const StarRating = ({ value, readonly = false, onChange }: TProps) => {
+  const handleClick = useCallback(
+    (val: number) => {
+      if (readonly) return
+      onChange(val)
+    },
+    [readonly, onChange],
+  )
+  // const handleStartClick = useCallback(
+  //   (event: React.MouseEvent<HTMLDivElement>) => {
+  //     if (readonly) return
+  //     const button = (event?.target as HTMLElement).closest('button')
+  //     if (!button) return
+  //     const starValue = Number(button.dataset.starValue)
+  //     if (!Number.isNaN(starValue)) {
+  //       onChange(starValue)
+  //     }
+  //   },
+  //   [readonly, onChange],
+  // )
+  return (
+    <div
+      aria-label="Star Rating"
+      role="radiogroup"
+      aria-readonly={readonly}
+      className={cx(css.container, flex.wh100)}
+      // onClick={handleStartClick}
+    >
+      <div className={flex.flexRowCenter}>
+        <input type="number" value={value} readOnly hidden />
+        {STARS.map((star, index) => {
+          const starIndex = index + 1
+          return (
+            <button
+              key={starIndex}
+              data-star-value={starIndex}
+              data-active={value >= starIndex}
+              className={cx(css.star, flex.flexColumnCenter, flex.fontXL)}
+              disabled={readonly}
+              role="radio"
+              aria-checked={value === starIndex}
+              aria-label={`${starIndex} Star`}
+              onClick={() => handleClick(starIndex)}
+            >
+              {star}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
 }

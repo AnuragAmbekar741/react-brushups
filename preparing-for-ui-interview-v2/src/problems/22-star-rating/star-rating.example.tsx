@@ -100,7 +100,8 @@ export const StarRatingVanillaExample = () => {
   )
 }
 export const StarRatingStudentExample = () => {
-  return <StarRatingStudent />
+  const [rating, setRating] = useState<number>(0)
+  return <StarRatingStudent onChange={setRating} value={rating} readonly={false} />
 }
 
 export const StarRatingStudentVanillaExample = () => {
