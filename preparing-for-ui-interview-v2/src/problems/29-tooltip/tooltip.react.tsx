@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import css from './tooltip.module.css'
+import React, { useEffect, useId, useRef, useState } from 'react'
+import css from './solution/tooltip.module.css'
 import cx from '@course/cx'
 
 type TooltipProps = {
@@ -29,8 +29,23 @@ const getAutoPosition = (
   triggerRect: DOMRect,
   boundaryRect: { left: number; top: number; right: number; bottom: number },
 ): 'top' | 'bottom' | 'left' | 'right' => {
-  // TODO: implement
-  return 'top'
+  const { width: tW, height: tH } = tooltipRect
+  const { left: trL, top: trT, right: trR, bottom: trB } = triggerRect
+
+  const fits = (x: number, y: number) =>
+    x >= boundaryRect.left &&
+    y >= boundaryRect.top &&
+    Math.ceil(x + tW) <= boundaryRect.right &&
+    Math.ceil(y + tH) <= boundaryRect.bottom
+
+  const candidates: TCandidate[] = [
+    { position: 'top', x: trL, y: trT - tH },
+    { position: 'right', x: trR, y: trT },
+    { position: 'bottom', x: trL, y: trB },
+    { position: 'left', x: trL - tW, y: trT },
+  ]
+
+  return candidates.find(({ x, y }) => fits(x, y))?.position ?? 'top'
 }
 
 /**
@@ -57,5 +72,54 @@ const getAutoPosition = (
  */
 export function Tooltip({ children, content, position = 'top', boundary }: TooltipProps) {
   // TODO: implement
-  return <div>TODO: Implement</div>
+  const [hidden, setHidden] = useState(true)
+  const [tooltipPosition, setTooltipPosition] = React.useState<'top' | 'bottom' | 'left' | 'right'>(
+    position === 'auto' ? 'top' : position,
+  )
+  const handleVisible = () => setHidden(false)
+  const handleHide = () => setHidden(true)
+
+  const tooltipRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const tooltipId = useId()
+
+  useEffect(() => {
+    if (!hidden && position === 'auto' && tooltipRef.current && containerRef.current) {
+      const tooltipRect = tooltipRef.current.getBoundingClientRect()
+      const triggerRect = containerRef.current.getBoundingClientRect()
+
+      const boundaryElement = boundary instanceof HTMLElement ? boundary : boundary?.current
+      const boundaryRect = boundaryElement
+        ? boundaryElement.getBoundingClientRect()
+        : { left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight }
+
+      const newPosition = getAutoPosition(tooltipRect, triggerRect, boundaryRect)
+
+      if (newPosition !== tooltipPosition) {
+        setTooltipPosition(newPosition)
+      }
+    }
+  }, [hidden, position, tooltipPosition, boundary])
+
+  return (
+    <div
+      ref={containerRef}
+      className={css.container}
+      onMouseEnter={handleVisible}
+      onMouseLeave={handleHide}
+      aria-describedby={!hidden ? tooltipId : undefined}
+    >
+      {children}
+      {!hidden && (
+        <div
+          role="tooltip"
+          ref={tooltipRef}
+          id={tooltipId}
+          className={cx(css.tooltip, positions[tooltipPosition])}
+        >
+          {content}
+        </div>
+      )}
+    </div>
+  )
 }
