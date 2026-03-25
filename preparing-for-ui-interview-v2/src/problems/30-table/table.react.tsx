@@ -31,6 +31,8 @@ type TSort<T> = {
   dir: TSortDir
 }
 
+const PAGE_SIZE: number = 5 as const
+
 export function Table<T extends { id: string }>({
   search,
   columns,
@@ -42,19 +44,49 @@ export function Table<T extends { id: string }>({
   // - data (T[], default [])
   // - currentPage (number, default 0)
   // - sort ({ columnId, direction } | null, default null)
+  const [query, setQuery] = useState<string>('')
+  const [data, setData] = useState<T[]>([])
+  const [page, setPage] = useState<number>(0)
+  const [sort, setSort] = useState<TSort<T> | null>(null)
 
   // Step 2: Fetch initial data
   // - useEffect on datasource change: reset data and currentPage, fetch page 0
+  useEffect(() => {
+    if (data.length >= (page + 1) * PAGE_SIZE) return
+    let cancelled = false
+    datasource.next(page, PAGE_SIZE).then(
+      (apiData) => {
+        if (!cancelled) {
+          setData(() => [...apiData, ...data])
+        }
+      },
+      (err: any) => {
+        throw err
+      },
+    )
+    return () => {
+      cancelled = true
+    }
+  }, [datasource, page, data])
 
   // Step 3: Implement pagination handlers
   // - next: if not on last page, increment currentPage; if data not yet fetched, call datasource.next and append
   // - prev: decrement currentPage (min 0)
-  const next = () => {}
-  const prev = () => {}
+  const next = () => {
+    setPage((page) => page + 1)
+  }
+  const prev = () => {
+    setPage((page) => page - 1)
+  }
 
   // Step 4: Implement search handler
   const searchHandler = (data: T[], query: string): T[] => {
-    return []
+    if (!query) return data
+    if (search) {
+      return search(query, data)
+    } else {
+      return data.filter((d) => d.id.includes(query))
+    }
   }
 
   // Step 5: Implement sort handler
@@ -70,12 +102,49 @@ export function Table<T extends { id: string }>({
   // - Sort filtered data using comparator prop if sort is active
   // - Slice to current page window
 
-  const compute = (): T[] => {}
+  const compute = (): T[] => {
+    const filteredData = searchHandler(data, query)
+    return filteredData.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+  }
 
   // Step 7: Render
   // - <table> with <thead> (column headers with sort indicators and data-column-id)
   // - <tbody> with rows from slice, using column renderers
   // - Controls: Prev/Next buttons (disabled at boundaries), page info, search input
 
-  return <div>TODO: Implement</div>
+  const chunk: T[] = compute()
+
+  const content = () => {
+    return chunk.map((item) => (
+      <tr key={item.id}>
+        {columns.map((col) => (
+          <td key={col.id}>{col.renderer(item)}</td>
+        ))}
+      </tr>
+    ))
+  }
+
+  return (
+    <div>
+      <table>
+        <thead>
+          <tr>
+            {columns.map((col) => (
+              <th key={col.id}>{col.name}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>{content()}</tbody>
+      </table>
+      <div>
+        <button disabled={page === 0} onClick={prev}>
+          Prev
+        </button>
+        <button disabled={page === datasource.pages - 1} onClick={next}>
+          Next
+        </button>
+        <input value={query} onChange={(e) => setQuery(e.target.value)} />
+      </div>
+    </div>
+  )
 }
