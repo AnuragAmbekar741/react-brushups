@@ -1,11 +1,9 @@
 import "./App.css";
-import Wordle from "./components/wordle";
-
+import Blogs from "./components/blogs/Blogs";
 function App() {
   return (
     <>
-      <h1 className="text-3xl font-bold underline">React Brushups</h1>
-      <Wordle />
+      <Blogs />
     </>
   );
 }
