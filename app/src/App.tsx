@@ -1,9 +1,9 @@
 import "./App.css";
-import Blogs from "./components/blogs/Blogs";
+import Retell from "./components/interview-question/Retell";
 function App() {
   return (
     <>
-      <Blogs />
+      <Retell />
     </>
   );
 }
